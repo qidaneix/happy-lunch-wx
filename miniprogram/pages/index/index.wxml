@@ -10,4 +10,33 @@
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
   </view>
+  <view class="usermotto">
+    <text class="user-motto">{{motto}}</text>
+  </view>
+  <view class="usermotto">
+    <text class="user-motto">{{motto}}</text>
+  </view>
+  <view class="usermotto">
+    <text class="user-motto">{{motto}}</text>
+  </view>
+  <view class="masking">
+    <swiper circular="{{true}}">
+      <swiper-item class="item red">
+        <view class="swiper-item">
+          <image src="../../assets/main-1.png"></image>
+        </view>
+      </swiper-item>
+      <swiper-item class="item yellow">
+        <view class="swiper-item">
+          <image src="../../assets/main-2.png"></image>
+        </view>
+      </swiper-item>
+      <swiper-item class="item blue">
+        <view class="swiper-item">
+          <image src="../../assets/main-3.png"></image>
+        </view>
+      </swiper-item>
+    </swiper>
+    <view>我马儿有些瘦</view>
+  </view>
 </view>
