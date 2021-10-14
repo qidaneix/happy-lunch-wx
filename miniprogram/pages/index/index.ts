@@ -16,6 +16,7 @@ Page({
     })
   },
   onLoad() {
+    console.log('index load')
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -43,6 +44,9 @@ Page({
       })
     }
   },
+  onShow() {
+    console.log('index show')
+  },
   getUserInfo(e: any) {
     console.log(e)
     app.globalData.userInfo = e.detail.userInfo
@@ -51,4 +55,10 @@ Page({
       hasUserInfo: true,
     })
   },
+  onHide() {
+    console.log('index hide')
+  },
+  onUnload() {
+    console.log('index unload')
+  }
 })

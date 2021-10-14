@@ -1,6 +1,6 @@
 <!--index.wxml-->
 <view class="container">
-  <view class="userinfo">
+  <!-- <view class="userinfo">
     <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
     <block wx:else>
       <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
@@ -38,5 +38,6 @@
       </swiper-item>
     </swiper>
     <view>我马儿有些瘦</view>
-  </view>
+  </view> -->
+  <navigator class="to-there" url="/pages/logs/logs" hover-class="navigator-hover">去页面log</navigator>
 </view>

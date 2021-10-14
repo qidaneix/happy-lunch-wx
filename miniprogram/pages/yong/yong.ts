@@ -7,7 +7,7 @@ Page({
     logs: [],
   },
   onLoad() {
-    console.log('logs load')
+    console.log('yong load')
     this.setData({
       logs: (wx.getStorageSync('logs') || []).map((log: string) => {
         return formatTime(new Date(log))
@@ -15,12 +15,13 @@ Page({
     })
   },
   onShow() {
-    console.log('logs show')
+    console.log('yong show')
   },
   onHide() {
-    console.log('logs hide')
+    console.log('yong hide')
   },
   onUnload() {
-    console.log('logs unload')
+    console.log('yong unload')
+
   }
 })
