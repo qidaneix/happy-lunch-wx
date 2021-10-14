@@ -1,8 +1,0 @@
-<!--logs.wxml-->
-<view class="container log-list">
-  <block wx:for="{{logs}}" wx:for-item="log">
-    <text class="log-item">{{index + 1}}. {{log}}</text>
-  </block>
-  <navigator url="/pages/yong/yong" hover-class="navigator-hover">去页面yong</navigator>
-  <navigator open-type="navigateBack" hover-class="navigator-hover">回去页面index</navigator>
-</view>

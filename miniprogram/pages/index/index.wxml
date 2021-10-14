@@ -1,43 +1,10 @@
 <!--index.wxml-->
 <view class="container">
-  <!-- <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
+  <view class="list">
+    <view class="item" wx:for="{{list}}">
+      <view class="name"><view>蓝牙名称：</view>{{item.name}}</view>
+      <view class="name"><view>验证码：</view>{{item.arr}}</view>
+    </view>
   </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
-  </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
-  </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
-  </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
-  </view>
-  <view class="masking">
-    <swiper circular="{{true}}">
-      <swiper-item class="item red">
-        <view class="swiper-item">
-          <image src="../../assets/main-1.png"></image>
-        </view>
-      </swiper-item>
-      <swiper-item class="item yellow">
-        <view class="swiper-item">
-          <image src="../../assets/main-2.png"></image>
-        </view>
-      </swiper-item>
-      <swiper-item class="item blue">
-        <view class="swiper-item">
-          <image src="../../assets/main-3.png"></image>
-        </view>
-      </swiper-item>
-    </swiper>
-    <view>我马儿有些瘦</view>
-  </view> -->
-  <navigator class="to-there" url="/pages/logs/logs" hover-class="navigator-hover">去页面log</navigator>
+  <button class="btn" bind:tap="bindViewTap">开启蓝牙广播搜索</button>
 </view>
