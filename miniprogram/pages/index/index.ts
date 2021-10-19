@@ -8,8 +8,12 @@ Page({
   },
   // 事件处理函数
   bindViewTap() {
+    const openTime = Date.now();
+    let startTime: any;
+    let stateChangeTog = false;
     const loop = () => {
       // 搜索外围蓝牙设备
+      let scanTime = Date.now();
       wx.startBluetoothDevicesDiscovery({
         allowDuplicatesKey: true,
         // interval: 3000,
@@ -33,8 +37,12 @@ Page({
                   );
                   const list = (this.data.list as any).concat([
                     {
-                      name: device.name,
+                      name: device.localName,
                       arr: arr.join("-").toUpperCase(),
+                      RSSI: `${device.RSSI}dBm`,
+                      openInvertal: `${(Date.now() - openTime) / 1000}s`,
+                      startInvertal: `${(Date.now() - startTime) / 1000}s`,
+                      scanInvertal: `${(Date.now() - scanTime) / 1000}s`,
                     },
                   ]);
                   this.setData({
@@ -61,9 +69,15 @@ Page({
         },
         fail: (e: any) => {
           console.error("startBluetoothDevicesDiscovery fail", e);
+          stateChangeTog = false;
           wx.getSystemInfo({
             success: (res) => {
-              if (
+              if (e.errCode === 10001 && e.errno === 1500102) {
+                wx.showModal({
+                  content: "蓝牙搜索广播失败，请检查系统定位功能是否开启",
+                  showCancel: false,
+                });
+              } else if (
                 res.platform === "android" &&
                 e.errCode === -1 &&
                 e.errno === 1509009
@@ -78,18 +92,21 @@ Page({
         },
       });
     };
-    let stateChangeTog = false;
     wx.openBluetoothAdapter({
-      success(res) {
+      success: (res) => {
         console.log("openBluetoothAdapter succ", res);
         wx.showToast({
           title: "蓝牙初始化成功",
           icon: "success",
           duration: 2000,
         });
-        loop();
+        startTime = Date.now();
+        if (!stateChangeTog) {
+          loop();
+          stateChangeTog = true;
+        }
       },
-      fail(res) {
+      fail: (res) => {
         console.error("openBluetoothAdapter fail", res);
         /**
          * TODO: 提示用户开启蓝牙及定位
@@ -120,12 +137,44 @@ Page({
           },
         });
 
-        // if (res.errCode !== 10001) return;
+        if (res.errCode !== 10001) return;
 
         wx.onBluetoothAdapterStateChange((res) => {
           console.log("adapterState changed, now is", res);
-          if (!res.available) return;
+          if (!res.available || !res.discovering) {
+            stateChangeTog = false;
+            /**
+             * TODO: 提示用户开启蓝牙及定位
+             */
+            wx.getSystemInfo({
+              success: (res) => {
+                if (res.platform === "ios") {
+                  wx.showModal({
+                    content: "蓝牙初始化失败，请检查系统蓝牙功能是否开启",
+                    showCancel: false,
+                    success: () => {
+                      wx.getWifiList({
+                        success: (e) => {
+                          console.log("getWifiList succ", e);
+                        },
+                        fail: (e) => {
+                          console.log("getWifiList fail", e);
+                        },
+                      });
+                    },
+                  });
+                } else if (res.platform === "android") {
+                  wx.showModal({
+                    content: "蓝牙初始化失败，请检查系统蓝牙及定位功能是否开启",
+                    showCancel: false,
+                  });
+                }
+              },
+            });
+            return;
+          }
           if (!stateChangeTog) {
+            startTime = Date.now();
             loop();
             stateChangeTog = true;
           }
@@ -133,35 +182,9 @@ Page({
       },
     });
   },
-  // onLoad() {
-  //   console.log("index load");
-  //   if (app.globalData.userInfo) {
-  //     this.setData({
-  //       userInfo: app.globalData.userInfo,
-  //       hasUserInfo: true,
-  //     });
-  //   } else if (this.data.canIUse) {
-  //     // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-  //     // 所以此处加入 callback 以防止这种情况
-  //     app.userInfoReadyCallback = (res) => {
-  //       this.setData({
-  //         userInfo: res.userInfo,
-  //         hasUserInfo: true,
-  //       });
-  //     };
-  //   } else {
-  //     // 在没有 open-type=getUserInfo 版本的兼容处理
-  //     wx.getUserInfo({
-  //       success: (res) => {
-  //         app.globalData.userInfo = res.userInfo;
-  //         this.setData({
-  //           userInfo: res.userInfo,
-  //           hasUserInfo: true,
-  //         });
-  //       },
-  //     });
-  //   }
-  // },
+  onLoad() {
+    this.bindViewTap();
+  },
   // onShow() {
   //   console.log("index show");
   // },

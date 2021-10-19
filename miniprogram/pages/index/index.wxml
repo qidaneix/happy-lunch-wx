@@ -4,7 +4,11 @@
     <view class="item" wx:for="{{list}}">
       <view class="name"><view>蓝牙名称：</view>{{item.name}}</view>
       <view class="name"><view>验证码：</view>{{item.arr}}</view>
+      <view class="name"><view>信号强度RSSI：</view>{{item.RSSI}}</view>
+      <view class="name"><view>页面启动-收到广播时间差：</view>{{item.openInvertal}}</view>
+      <view class="name"><view>调试器启动-收到广播时间差：</view>{{item.startInvertal}}</view>
+      <view class="name"><view>开启搜到-收到广播时间差：</view>{{item.scanInvertal}}</view>
     </view>
   </view>
-  <button class="btn" bind:tap="bindViewTap">开启蓝牙广播搜索</button>
+  <button class="btn" bind:tap="bindViewTap">手动开启蓝牙广播搜索</button>
 </view>
