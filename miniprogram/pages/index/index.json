@@ -1,3 +1,5 @@
 {
-  "usingComponents": {}
+  "usingComponents": {},
+  "navigationBarTitleText": "蓝牙BLE广播实验",
+  "navigationBarBackgroundColor": "#FFFF00"
 }

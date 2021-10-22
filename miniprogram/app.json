@@ -1,8 +1,7 @@
 {
-  "pages": ["pages/index/index"],
+  "pages": ["pages/index/index", "pages/beacon/beacon"],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "接收蓝牙广播",
     "navigationBarTextStyle": "black"
   },
