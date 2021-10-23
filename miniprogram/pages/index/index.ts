@@ -24,7 +24,7 @@ Page({
         wx.showToast({
           title: "蓝牙启动成功",
           icon: "success",
-          duration: 2000,
+          duration: 5000,
         });
         this.startScan();
       },
@@ -93,7 +93,6 @@ Page({
                   },
                   () => {
                     /**
-                     * TODO: request
                      * type: BLE
                      * 时间戳
                      * 蓝牙名称
@@ -105,14 +104,10 @@ Page({
                      * 设备信息 JSON.string(wx.getSystemInfoSync())
                      * app.globalData.uuid
                      * app.globalData.userInfo
+                     * app.globalData.username
                      */
-                    wx.showLoading({
-                      title: "上传实验结果中",
-                      mask: true,
-                    });
-                    wx.request({
-                      url: "https://tyg.weixiao.qq.com/fr/bluetooth/log",
-                      data: {
+                    if (app.globalData.userName) {
+                      this.requestData({
                         type: "BLE",
                         time: Date.now(),
                         name: device.localName,
@@ -124,31 +119,24 @@ Page({
                         deviceInfo: wx.getSystemInfoSync(),
                         uuid: app.globalData.uuid,
                         userInfo: app.globalData.userInfo,
-                      },
-                      method: "POST",
-                      success: (res) => {
-                        if (
-                          res.statusCode === 200 &&
-                          (res.data as any).code === 0
-                        ) {
-                          wx.hideLoading();
-                          wx.showToast({
-                            title: "实验上报成功",
-                            icon: "success",
-                            duration: 2000,
-                          });
-                        }
-                      },
-                      fail: (res) => {
-                        console.warn(res);
-                        wx.hideLoading();
-                        wx.showToast({
-                          title: "实验上报失败",
-                          icon: "success",
-                          duration: 2000,
+                      });
+                    } else {
+                      this.setNameModal().then(() => {
+                        this.requestData({
+                          type: "BLE",
+                          time: Date.now(),
+                          name: device.localName,
+                          code: arr.join("-").toUpperCase(),
+                          RSSI: device.RSSI,
+                          openInterval,
+                          startInterval,
+                          scanInterval,
+                          deviceInfo: wx.getSystemInfoSync(),
+                          uuid: app.globalData.uuid,
+                          userInfo: app.globalData.userInfo,
                         });
-                      },
-                    });
+                      });
+                    }
                   }
                 );
               } catch (e) {
@@ -241,7 +229,6 @@ Page({
         },
         () => {
           /**
-           * TODO: request
            * type: BLE
            * uuid
            * 错误类型
@@ -250,14 +237,10 @@ Page({
            * 设备信息 JSON.string(wx.getSystemInfoSync())
            * app.globalData.uuid
            * app.globalData.userInfo
+           * app.globalData.username
            */
-          wx.showLoading({
-            title: "错误信息上报中",
-            mask: true,
-          });
-          wx.request({
-            url: "https://tyg.weixiao.qq.com/fr/bluetooth/log",
-            data: {
+          if (app.globalData.userName) {
+            this.requestError({
               type: "BLE",
               time: Date.now(),
               errType: args[0],
@@ -265,33 +248,87 @@ Page({
               deviceInfo: wx.getSystemInfoSync(),
               uuid: app.globalData.uuid,
               userInfo: app.globalData.userInfo,
-            },
-            method: "POST",
-            success: (res) => {
-              if (res.statusCode === 200 && (res.data as any).code === 0) {
-                wx.hideLoading();
-                wx.showToast({
-                  title: "错误上报成功",
-                  icon: "none",
-                  duration: 1000,
-                });
-              }
-            },
-            fail: (res) => {
-              console.warn(res);
-              wx.hideLoading();
-              wx.showToast({
-                title: "错误上报失败",
-                icon: "none",
-                duration: 1000,
+              userName: app.globalData.userName,
+            });
+          } else {
+            this.setNameModal().then(() => {
+              this.requestError({
+                type: "BLE",
+                time: Date.now(),
+                errType: args[0],
+                json: JSON.stringify(args[1]),
+                deviceInfo: wx.getSystemInfoSync(),
+                uuid: app.globalData.uuid,
+                userInfo: app.globalData.userInfo,
+                userName: app.globalData.userName,
               });
-            },
-          });
+            });
+          }
         }
       );
 
       OldError.call(console, ...args);
     };
+  },
+  requestData(data: any) {
+    wx.showLoading({
+      title: "上传实验结果中",
+      mask: true,
+    });
+    wx.request({
+      url: "https://tyg.weixiao.qq.com/fr/bluetooth/log",
+      data,
+      method: "POST",
+      success: (res) => {
+        if (res.statusCode === 200 && (res.data as any).code === 0) {
+          wx.hideLoading();
+          wx.showToast({
+            title: "实验上报成功",
+            icon: "success",
+            duration: 5000,
+          });
+        }
+      },
+      fail: (res) => {
+        console.warn(res);
+        wx.hideLoading();
+        wx.showToast({
+          title: "实验上报失败",
+          icon: "success",
+          duration: 5000,
+        });
+      },
+    });
+  },
+  requestError(data: any) {
+    wx.showLoading({
+      title: "错误信息上报中",
+      mask: true,
+    });
+    wx.request({
+      url: "https://tyg.weixiao.qq.com/fr/bluetooth/log",
+      data,
+      method: "POST",
+      success: (res) => {
+        if (res.statusCode === 200 && (res.data as any).code === 0) {
+          wx.hideLoading();
+          wx.showToast({
+            title: "错误上报成功",
+            icon: "none",
+            duration: 5000,
+          });
+        }
+      },
+      fail: (res) => {
+        console.warn(res);
+        wx.hideLoading();
+        wx.showToast({
+          title: "错误上报失败",
+          icon: "none",
+          duration: 5000,
+        });
+      },
+    });
   },
   timer() {
     this.timerId = setInterval(() => {
@@ -305,6 +342,28 @@ Page({
     this.postError();
     this.timer();
     this.init();
+  },
+  setNameModal() {
+    return new Promise((resolve) => {
+      return wx.showModal({
+        title: "请输入您的企微名，方便我们做后期问题调查",
+        // @ts-ignore
+        editable: true,
+        showCancel: false,
+        success: (res) => {
+          // @ts-ignore
+          if (res.content) {
+            // @ts-ignore
+            const userName = wx.setStorageSync("userName", res.content);
+            // @ts-ignore
+            app.globalData.userName = res.content;
+          } else {
+            app.globalData.userName = "";
+          }
+          resolve(app.globalData.userName);
+        },
+      });
+    });
   },
   onHide() {
     /**

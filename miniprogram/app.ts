@@ -19,6 +19,11 @@ App<IAppOption>({
       this.globalData.uuid = uuid;
     }
 
+    const userName = wx.getStorageSync("userName");
+    if (userName) {
+      this.globalData.userName = userName;
+    }
+
     // 获取用户信息
     wx.getSetting({
       success: (res) => {
@@ -41,7 +46,9 @@ App<IAppOption>({
   },
   onShow() {
     const { time } = wx.getStorageSync("uuid");
+    const userName = wx.getStorageSync("userName");
     console.log("uuid", wx.getStorageSync("uuid"));
+    console.log("userName", userName);
     console.log(
       "timeout",
       Date.now() - time,
