@@ -3,10 +3,10 @@
   <view class="tips">
     <view class="item">非常感谢配合参与实验！下面是一些注意事项：</view>
     <view class="item">1. 访问页面即开始搜索广播，不需要任何操作，请耐心等待，直至出现广播信息或错误信息</view>
-    <view class="item">2. 如果已经出现广播或错误信息，并且出现上报成功弹窗，请重新扫码实验，蓝牙BLE和iBeacon各扫码实验5次</view>
-    <view class="item">3. 如果超过30s没有出现任何广播或错误信息，请截图发给@jinxiao</view>
-    <view class="item">4. 当蓝牙或定位功能未开启以及蓝牙或定位未给微信授权时，会有弹窗提示，请到系统设置进行设置，设置完成后请重新扫码进行实验</view>
-    <view class="item">5. 开启蓝牙及定位后如果仍然出现异常，也请联系@jinxiao</view>
+    <view class="item">2. 如果已经出现广播或错误信息，并且出现上报成功弹窗，请重新扫码实验，<text class="green">蓝牙BLE和iBeacon各扫码实验5次</text></view>
+    <view class="item">3. <text class="red">如果超过30s没有出现任何广播或错误信息</text>，请截图发给@jinxiao</view>
+    <view class="item">4. <text class="green">当蓝牙或定位功能未开启以及蓝牙或定位未给微信授权时，会有弹窗提示</text>，请到系统设置进行设置，设置完成后请重新扫码进行实验</view>
+    <view class="item">5. <text class="red">开启蓝牙及定位后如果仍然出现错误信息</text>，也请联系@jinxiao</view>
   </view>
   <view class="list">
     <!-- <button bind:tap="toBluetoothSetting">toBluetoothSetting</button>

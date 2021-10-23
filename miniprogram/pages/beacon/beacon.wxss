@@ -8,7 +8,7 @@
 .tips {
   height: 45vh;
   box-sizing: border-box;
-  border: 1rpx solid green;
+  border: 6rpx solid green;
   overflow: auto;
 }
 .tips .item {
@@ -19,7 +19,7 @@
   height: 25vh;
   flex: 0 0 auto;
   box-sizing: border-box;
-  border: 1rpx solid red;
+  border: 6rpx solid red;
   overflow: auto;
 }
 .list .item {
@@ -34,7 +34,7 @@
   height: 30vh;
   flex: 0 0 auto;
   box-sizing: border-box;
-  border: 1rpx solid blue;
+  border: 6rpx solid blue;
   overflow: auto;
 }
 .errorlist .item {
@@ -60,4 +60,7 @@
 }
 .red {
   color: red;
+}
+.green {
+  color: green;
 }
