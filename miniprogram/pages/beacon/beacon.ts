@@ -16,6 +16,7 @@ Page({
   // 事件处理函数
   init() {
     wx.startBeaconDiscovery({
+      ignoreBluetoothAvailable: true,
       uuids: ["FDA50693-A4E2-4FB1-AFCF-C6EB07647824"], // 一个公众号对应的设备的uuid
       success: (res) => {
         console.log("startBeaconDiscovery succ", res);
