@@ -119,6 +119,7 @@ Page({
                         deviceInfo: wx.getSystemInfoSync(),
                         uuid: app.globalData.uuid,
                         userInfo: app.globalData.userInfo,
+                        userName: app.globalData.userName,
                       });
                     } else {
                       this.setNameModal().then(() => {
@@ -134,6 +135,7 @@ Page({
                           deviceInfo: wx.getSystemInfoSync(),
                           uuid: app.globalData.uuid,
                           userInfo: app.globalData.userInfo,
+                          userName: app.globalData.userName,
                         });
                       });
                     }
