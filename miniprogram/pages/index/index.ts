@@ -26,7 +26,8 @@ Page({
           icon: "success",
           duration: 5000,
         });
-        this.startScan();
+        // this.startScan();
+        this.retry();
       },
       fail: (res) => {
         console.error("openBluetoothAdapter fail", res);
@@ -45,6 +46,30 @@ Page({
         //     this.stateChangeNotAvaTog = true;
         //   }
         // });
+      },
+    });
+  },
+  retry() {
+    this.startScan();
+    setTimeout(() => {
+      if (this.data.list.length) return;
+
+      this.stopScan();
+      console.error("stop scan", "for retry");
+
+      setTimeout(() => {
+        this.retry();
+        console.error("start scan", "for retry");
+      }, 1000);
+    }, 4000);
+  },
+  stopScan() {
+    wx.stopBluetoothDevicesDiscovery({
+      success: (e) => {
+        console.log("stopBluetoothDevicesDiscovery succ", e);
+      },
+      fail: (e) => {
+        console.error("stopBluetoothDevicesDiscovery fail", e);
       },
     });
   },
@@ -145,14 +170,7 @@ Page({
                 console.error("parse advertisData error", e);
               }
               // 找到要搜索的设备后，及时停止扫描
-              wx.stopBluetoothDevicesDiscovery({
-                success: (e) => {
-                  console.log("stopBluetoothDevicesDiscovery succ", e);
-                },
-                fail: (e) => {
-                  console.error("stopBluetoothDevicesDiscovery fail", e);
-                },
-              });
+              this.stopScan();
             }
           });
         });
