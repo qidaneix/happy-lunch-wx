@@ -60,7 +60,7 @@ Page({
         wx.onBluetoothDeviceFound((res) => {
           res.devices.forEach((device) => {
             // 这里可以做一些过滤
-            if (device.name.indexOf("weixiao_test") > -1) {
+            if (device.name.indexOf("weixiao") > -1) {
               try {
                 const view = new Uint8Array(device.advertisData);
                 const arr: any[] = [];
