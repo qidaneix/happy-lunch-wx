@@ -32,7 +32,7 @@ Page({
       },
       fail: (res) => {
         console.error("openBluetoothAdapter fail", res);
-        // this.errTips();
+        this.errTips();
         this.startTime = Date.now();
 
         // if (res.errCode !== 10001) return;
@@ -198,153 +198,153 @@ Page({
       },
     });
   },
-  // errTips() {
-  //   wx.getSystemInfo({
-  //     // @ts-ignore
+  errTips() {
+    wx.getSystemInfo({
+      // @ts-ignore
+      success: (res) => {
+        if (res.platform === "ios") {
+          wx.showModal({
+            content:
+              "蓝牙模块初始化失败，请检查系统蓝牙功能是否开启。\n开启后请扫码重新进入页面！",
+            showCancel: false,
+          });
+        } else if (res.platform === "android") {
+          wx.showModal({
+            content:
+              "蓝牙模块初始化失败，请检查系统蓝牙及定位功能是否开启。\n开启后请扫码重新进入页面！",
+            showCancel: false,
+          });
+        }
+      },
+    });
+  },
+  postError() {
+    const OldError = console.error;
+    console.error = (...args) => {
+      this.setData(
+        {
+          errorList: this.data.errorList.concat([
+            {
+              type: args[0],
+              json: JSON.stringify(args[1]),
+              time: Date.now(),
+            },
+          ]),
+        }
+        // () => {
+        //   /**
+        //    * type: BLE
+        //    * uuid
+        //    * 错误类型
+        //    * 信息
+        //    * 时间戳
+        //    * 设备信息 JSON.string(wx.getSystemInfoSync())
+        //    * app.globalData.uuid
+        //    * app.globalData.userInfo
+        //    * app.globalData.username
+        //    */
+        //   if (app.globalData.userName) {
+        //     this.requestError({
+        //       type: "BLE",
+        //       time: Date.now(),
+        //       errType: args[0],
+        //       json: args[1],
+        //       deviceInfo: wx.getSystemInfoSync(),
+        //       uuid: app.globalData.uuid,
+        //       userInfo: app.globalData.userInfo,
+        //       userName: app.globalData.userName,
+        //     });
+        //   } else {
+        //     this.setNameModal().then(() => {
+        //       this.requestError({
+        //         type: "BLE",
+        //         time: Date.now(),
+        //         errType: args[0],
+        //         json: args[1],
+        //         deviceInfo: wx.getSystemInfoSync(),
+        //         uuid: app.globalData.uuid,
+        //         userInfo: app.globalData.userInfo,
+        //         userName: app.globalData.userName,
+        //       });
+        //     });
+        //   }
+        // }
+      );
+
+      OldError.call(console, ...args);
+    };
+  },
+  // requestData(data: any) {
+  //   wx.showLoading({
+  //     title: "上传实验结果中",
+  //     mask: true,
+  //   });
+  //   wx.request({
+  //     url: "https://tyg.weixiao.qq.com/fr/bluetooth/log",
+  //     data,
+  //     method: "POST",
   //     success: (res) => {
-  //       if (res.platform === "ios") {
-  //         wx.showModal({
-  //           content:
-  //             "蓝牙模块初始化失败，请检查系统蓝牙功能是否开启。\n开启后请扫码重新进入页面！",
-  //           showCancel: false,
-  //         });
-  //       } else if (res.platform === "android") {
-  //         wx.showModal({
-  //           content:
-  //             "蓝牙模块初始化失败，请检查系统蓝牙及定位功能是否开启。\n开启后请扫码重新进入页面！",
-  //           showCancel: false,
+  //       if (res.statusCode === 200 && (res.data as any).code === 0) {
+  //         wx.hideLoading();
+  //         wx.showToast({
+  //           title: "实验上报成功",
+  //           icon: "success",
+  //           duration: 5000,
   //         });
   //       }
   //     },
+  //     fail: (res) => {
+  //       console.warn(res);
+  //       wx.hideLoading();
+  //       wx.showToast({
+  //         title: "实验上报失败",
+  //         icon: "success",
+  //         duration: 5000,
+  //       });
+  //     },
   //   });
   // },
-  // postError() {
-  //   const OldError = console.error;
-  //   console.error = (...args) => {
-  //     this.setData(
-  //       {
-  //         errorList: this.data.errorList.concat([
-  //           {
-  //             type: args[0],
-  //             json: JSON.stringify(args[1]),
-  //             time: Date.now(),
-  //           },
-  //         ]),
-  //       },
-  //       () => {
-  //         /**
-  //          * type: BLE
-  //          * uuid
-  //          * 错误类型
-  //          * 信息
-  //          * 时间戳
-  //          * 设备信息 JSON.string(wx.getSystemInfoSync())
-  //          * app.globalData.uuid
-  //          * app.globalData.userInfo
-  //          * app.globalData.username
-  //          */
-  //         // if (app.globalData.userName) {
-  //         //   this.requestError({
-  //         //     type: "BLE",
-  //         //     time: Date.now(),
-  //         //     errType: args[0],
-  //         //     json: args[1],
-  //         //     deviceInfo: wx.getSystemInfoSync(),
-  //         //     uuid: app.globalData.uuid,
-  //         //     userInfo: app.globalData.userInfo,
-  //         //     userName: app.globalData.userName,
-  //         //   });
-  //         // } else {
-  //         //   this.setNameModal().then(() => {
-  //         //     this.requestError({
-  //         //       type: "BLE",
-  //         //       time: Date.now(),
-  //         //       errType: args[0],
-  //         //       json: args[1],
-  //         //       deviceInfo: wx.getSystemInfoSync(),
-  //         //       uuid: app.globalData.uuid,
-  //         //       userInfo: app.globalData.userInfo,
-  //         //       userName: app.globalData.userName,
-  //         //     });
-  //         //   });
-  //         // }
+  // requestError(data: any) {
+  //   wx.showLoading({
+  //     title: "错误信息上报中",
+  //     mask: true,
+  //   });
+  //   wx.request({
+  //     url: "https://tyg.weixiao.qq.com/fr/bluetooth/log",
+  //     data,
+  //     method: "POST",
+  //     success: (res) => {
+  //       if (res.statusCode === 200 && (res.data as any).code === 0) {
+  //         wx.hideLoading();
+  //         wx.showToast({
+  //           title: "错误上报成功",
+  //           icon: "none",
+  //           duration: 5000,
+  //         });
   //       }
-  //     );
-
-  //     OldError.call(console, ...args);
-  //   };
+  //     },
+  //     fail: (res) => {
+  //       console.warn(res);
+  //       wx.hideLoading();
+  //       wx.showToast({
+  //         title: "错误上报失败",
+  //         icon: "none",
+  //         duration: 5000,
+  //       });
+  //     },
+  //   });
   // },
-  // // requestData(data: any) {
-  // //   wx.showLoading({
-  // //     title: "上传实验结果中",
-  // //     mask: true,
-  // //   });
-  // //   wx.request({
-  // //     url: "https://tyg.weixiao.qq.com/fr/bluetooth/log",
-  // //     data,
-  // //     method: "POST",
-  // //     success: (res) => {
-  // //       if (res.statusCode === 200 && (res.data as any).code === 0) {
-  // //         wx.hideLoading();
-  // //         wx.showToast({
-  // //           title: "实验上报成功",
-  // //           icon: "success",
-  // //           duration: 5000,
-  // //         });
-  // //       }
-  // //     },
-  // //     fail: (res) => {
-  // //       console.warn(res);
-  // //       wx.hideLoading();
-  // //       wx.showToast({
-  // //         title: "实验上报失败",
-  // //         icon: "success",
-  // //         duration: 5000,
-  // //       });
-  // //     },
-  // //   });
-  // // },
-  // // requestError(data: any) {
-  // //   wx.showLoading({
-  // //     title: "错误信息上报中",
-  // //     mask: true,
-  // //   });
-  // //   wx.request({
-  // //     url: "https://tyg.weixiao.qq.com/fr/bluetooth/log",
-  // //     data,
-  // //     method: "POST",
-  // //     success: (res) => {
-  // //       if (res.statusCode === 200 && (res.data as any).code === 0) {
-  // //         wx.hideLoading();
-  // //         wx.showToast({
-  // //           title: "错误上报成功",
-  // //           icon: "none",
-  // //           duration: 5000,
-  // //         });
-  // //       }
-  // //     },
-  // //     fail: (res) => {
-  // //       console.warn(res);
-  // //       wx.hideLoading();
-  // //       wx.showToast({
-  // //         title: "错误上报失败",
-  // //         icon: "none",
-  // //         duration: 5000,
-  // //       });
-  // //     },
-  // //   });
-  // // },
-  // timer() {
-  //   this.timerId = setInterval(() => {
-  //     this.setData({
-  //       count: this.data.count + 1,
-  //     });
-  //   }, 1000);
-  // },
+  timer() {
+    this.timerId = setInterval(() => {
+      this.setData({
+        count: this.data.count + 1,
+      });
+    }, 1000);
+  },
   onShow() {
     this.pageShowTime = Date.now();
-    // this.postError();
-    // this.timer();
+    this.postError();
+    this.timer();
     this.init();
   },
   // setNameModal() {
@@ -369,51 +369,51 @@ Page({
   //     });
   //   });
   // },
-  // onHide() {
-  //   /**
-  //    * clear
-  //    */
-  //   this.setData({
-  //     list: [],
-  //     errorList: [],
-  //     count: 0,
+  onHide() {
+    /**
+     * clear
+     */
+    this.setData({
+      list: [],
+      errorList: [],
+      count: 0,
+    });
+    clearInterval(this.timerId);
+    this.timerId = null;
+    this.pageShowTime = 0;
+    this.startTime = 0;
+    this.scanTime = 0;
+    // this.stateChangeAvaTog = false;
+    // this.stateChangeNotAvaTog = false;
+    // @ts-ignore
+    // wx.offBluetoothAdapterStateChange();
+    // @ts-ignore
+    // wx.offBluetoothDeviceFound();
+    wx.stopBluetoothDevicesDiscovery();
+    wx.closeBluetoothAdapter();
+  },
+  // toBluetoothSetting() {
+  //   console.log("be here");
+  //   // @ts-ignore
+  //   wx.openSystemBluetoothSetting({
+  //     success(res: any) {
+  //       console.log(res);
+  //     },
+  //     fail(e: any) {
+  //       console.error(e);
+  //     },
   //   });
-  //   clearInterval(this.timerId);
-  //   this.timerId = null;
-  //   this.pageShowTime = 0;
-  //   this.startTime = 0;
-  //   this.scanTime = 0;
-  //   // this.stateChangeAvaTog = false;
-  //   // this.stateChangeNotAvaTog = false;
-  //   // @ts-ignore
-  //   // wx.offBluetoothAdapterStateChange();
-  //   // @ts-ignore
-  //   // wx.offBluetoothDeviceFound();
-  //   wx.stopBluetoothDevicesDiscovery();
-  //   wx.closeBluetoothAdapter();
   // },
-  // // toBluetoothSetting() {
-  // //   console.log("be here");
-  // //   // @ts-ignore
-  // //   wx.openSystemBluetoothSetting({
-  // //     success(res: any) {
-  // //       console.log(res);
-  // //     },
-  // //     fail(e: any) {
-  // //       console.error(e);
-  // //     },
-  // //   });
-  // // },
-  // // toAppAuthorizeSetting() {
-  // //   console.log("be here");
-  // //   // @ts-ignore
-  // //   wx.openAppAuthorizeSetting({
-  // //     success(res: any) {
-  // //       console.log(res);
-  // //     },
-  // //     fail(e: any) {
-  // //       console.error(e);
-  // //     },
-  // //   });
-  // // },
+  // toAppAuthorizeSetting() {
+  //   console.log("be here");
+  //   // @ts-ignore
+  //   wx.openAppAuthorizeSetting({
+  //     success(res: any) {
+  //       console.log(res);
+  //     },
+  //     fail(e: any) {
+  //       console.error(e);
+  //     },
+  //   });
+  // },
 });
