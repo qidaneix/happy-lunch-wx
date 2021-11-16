@@ -31,7 +31,7 @@
 }
 .errorlist {
   width: 100vw;
-  height: 30vh;
+  height: 75vh;
   flex: 0 0 auto;
   box-sizing: border-box;
   border: 6rpx solid blue;

@@ -1,5 +1,5 @@
 {
-  "pages": ["pages/index/index", "pages/beacon/beacon"],
+  "pages": ["pages/index/index"],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarTitleText": "接收蓝牙广播",
